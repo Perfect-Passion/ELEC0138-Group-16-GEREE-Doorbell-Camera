@@ -1,0 +1,15 @@
+2025-04-22 16:55:59,658 - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8081
+ * Running on http://10.97.178.253:8081
+2025-04-22 16:55:59,658 - [33mPress CTRL+C to quit[0m
+2025-04-22 16:55:59,659 -  * Restarting with stat
+2025-04-22 16:55:59,952 -  * Debugger is active!
+2025-04-22 16:55:59,954 -  * Debugger PIN: 974-015-214
+2025-04-22 16:56:01,910 - 127.0.0.1 - - [22/Apr/2025 16:56:01] "HEAD / HTTP/1.1" 200 -
+2025-04-22 16:56:14,656 - 127.0.0.1 - - [22/Apr/2025 16:56:14] "OPTIONS /register HTTP/1.1" 200 -
+2025-04-22 16:56:14 - [REGISTER][BRUTE-CRACKED] username: ouyangwenjie, email: zczqouy@ucl.ac.uk, phone: 07379294736, password: 123456
+2025-04-22 16:56:14,958 - 127.0.0.1 - - [22/Apr/2025 16:56:14] "[35m[1mPOST /register HTTP/1.1[0m" 201 -
+2025-04-22 16:56:26,470 - 127.0.0.1 - - [22/Apr/2025 16:56:26] "OPTIONS /login HTTP/1.1" 200 -
+2025-04-22 16:56:26 - [LOGIN][BRUTE-CRACKED] identifier: ouyangwenjie, password: 123456
+2025-04-22 16:56:26,703 - 127.0.0.1 - - [22/Apr/2025 16:56:26] "POST /login HTTP/1.1" 200 -

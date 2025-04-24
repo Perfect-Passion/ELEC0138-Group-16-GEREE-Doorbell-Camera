@@ -1,0 +1,41 @@
+2025-04-22 17:15:20,503 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.97.178.253:5000
+2025-04-22 17:15:20,503 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-22 17:15:20,504 - INFO -  * Restarting with stat
+2025-04-22 17:15:20,944 - WARNING -  * Debugger is active!
+2025-04-22 17:15:20,947 - INFO -  * Debugger PIN: 974-015-214
+2025-04-22 17:15:21,883 - INFO - 127.0.0.1 - - [22/Apr/2025 17:15:21] "GET / HTTP/1.1" 200 -
+2025-04-22 17:15:22,481 - INFO - 127.0.0.1 - - [22/Apr/2025 17:15:22] "[36mGET /static/Background.png HTTP/1.1[0m" 304 -
+2025-04-22 17:15:31,081 - INFO - [REGISTER] username: ouyangwenjie, email: zczqouy@ucl.ac.uk, phone: 07379294736, password: 123456
+2025-04-22 17:15:31,293 - INFO - 127.0.0.1 - - [22/Apr/2025 17:15:31] "[35m[1mPOST /register HTTP/1.1[0m" 201 -
+2025-04-22 17:15:41,489 - INFO - 127.0.0.1 - - [22/Apr/2025 17:15:41] "[31m[1mPOST /sendcode HTTP/1.1[0m" 401 -
+2025-04-22 17:15:49,307 - INFO - Email sent successfully: zczqouy@ucl.ac.uk
+2025-04-22 17:15:49,307 - INFO - OTP sent to ouyangwenjie
+2025-04-22 17:15:49,308 - INFO - 127.0.0.1 - - [22/Apr/2025 17:15:49] "POST /sendcode HTTP/1.1" 200 -
+2025-04-22 17:16:11,191 - INFO - 127.0.0.1 - - [22/Apr/2025 17:16:11] "[31m[1mPOST /login HTTP/1.1[0m" 401 -
+2025-04-22 17:16:17,268 - INFO - 127.0.0.1 - - [22/Apr/2025 17:16:17] "[31m[1mPOST /login HTTP/1.1[0m" 401 -
+2025-04-22 17:16:25,654 - INFO - 127.0.0.1 - - [22/Apr/2025 17:16:25] "[31m[1mPOST /login HTTP/1.1[0m" 401 -
+2025-04-22 17:16:32,850 - INFO - [LOGIN] identifier: ouyangwenjie, password: 123456, otp: 486626
+2025-04-22 17:16:32,851 - INFO - 127.0.0.1 - - [22/Apr/2025 17:16:32] "POST /login HTTP/1.1" 200 -
+2025-04-22 17:18:44,405 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.97.178.253:5000
+2025-04-22 17:18:44,405 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-22 17:18:44,406 - INFO -  * Restarting with stat
+2025-04-22 17:18:44,923 - WARNING -  * Debugger is active!
+2025-04-22 17:18:44,925 - INFO -  * Debugger PIN: 974-015-214
+2025-04-22 17:18:45,590 - INFO - 127.0.0.1 - - [22/Apr/2025 17:18:45] "GET / HTTP/1.1" 200 -
+2025-04-22 17:18:46,180 - INFO - 127.0.0.1 - - [22/Apr/2025 17:18:46] "[36mGET /static/Background.png HTTP/1.1[0m" 304 -
+2025-04-22 17:18:46,191 - INFO - 127.0.0.1 - - [22/Apr/2025 17:18:46] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-22 17:18:54,563 - INFO - [REGISTER] username: ouyangwenjie, email: zczqouy@ucl.ac.uk, phone: 07379294736, password: 123456
+2025-04-22 17:18:54,769 - INFO - 127.0.0.1 - - [22/Apr/2025 17:18:54] "[35m[1mPOST /register HTTP/1.1[0m" 201 -
+2025-04-22 17:19:06,708 - INFO - 127.0.0.1 - - [22/Apr/2025 17:19:06] "[31m[1mPOST /sendcode HTTP/1.1[0m" 401 -
+2025-04-22 17:19:13,603 - INFO - Email sent successfully: zczqouy@ucl.ac.uk
+2025-04-22 17:19:13,603 - INFO - OTP sent to ouyangwenjie
+2025-04-22 17:19:13,604 - INFO - 127.0.0.1 - - [22/Apr/2025 17:19:13] "POST /sendcode HTTP/1.1" 200 -
+2025-04-22 17:19:26,685 - INFO - 127.0.0.1 - - [22/Apr/2025 17:19:26] "[31m[1mPOST /login HTTP/1.1[0m" 401 -
+2025-04-22 17:19:32,725 - INFO - [LOGIN] identifier: ouyangwenjie, password: 123456, otp: 204370
+2025-04-22 17:19:32,725 - INFO - 127.0.0.1 - - [22/Apr/2025 17:19:32] "POST /login HTTP/1.1" 200 -

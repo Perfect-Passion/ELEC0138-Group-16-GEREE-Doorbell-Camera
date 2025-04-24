@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>GEREE Doorbell Camera - Login/Register</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <!-- Include JSEncrypt for RSA encryption -->
+  <script src="https://cdn.jsdelivr.net/npm/jsencrypt/bin/jsencrypt.min.js"></script>
+  <style>
+    /* Global Styles */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%; height: 100%; overflow: hidden;
+      font-family: 'Lato', sans-serif;
+      background: url('/static/Background.png') no-repeat center center fixed;
+      background-size: 100% 100%;
+    }
+    .container {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 420px; min-height: 520px;
+      background-color: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      border-radius: 12px; padding: 40px 30px;
+    }
+    .logo-container { text-align: center; margin-bottom: 5px; }
+    .logo-text {
+      font-family: 'Anton', sans-serif; font-size: 72px;
+      letter-spacing: 3px; color: #005bea;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    .switch-btns {
+      display: flex; justify-content: center;
+      margin-bottom: 15px; border-bottom: 1px solid #e0e0e0;
+    }
+    .switch-btns button {
+      background: transparent; border: none;
+      font-size: 16px; margin: 0 20px; padding: 10px 0;
+      cursor: pointer; transition: color .3s, border-bottom .3s;
+      color: #666;
+    }
+    .switch-btns .active { color: #005bea; border-bottom: 2px solid #005bea; }
+    .form-title {
+      text-align: center; font-size: 26px; font-weight: 700;
+      color: #333; margin: -10px 0 25px; letter-spacing: 1px;
+    }
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block; margin-bottom: 6px;
+      font-size: 14px; color: #555;
+    }
+    .form-group input {
+      width: 100%; padding: 12px 10px;
+      font-size: 15px; border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .form-group input:focus {
+      border-color: #005bea;
+      box-shadow: 0 0 8px rgba(0,91,234,0.2);
+      outline: none;
+    }
+    .submit-btn {
+      width: 100%; padding: 12px;
+      font-size: 16px; font-weight: 700; color: #fff;
+      background-color: #005bea; border: none;
+      border-radius: 4px; cursor: pointer;
+      margin-top: 10px; transition: background-color .3s;
+    }
+    .submit-btn:hover { background-color: #004bb5; }
+    .hidden { display: none; }
+    .otp-container { display: flex; align-items: center; }
+    .otp-container input { flex: 1; margin-right: 5px; }
+    .send-code-btn {
+      padding: 8px 12px; font-size: 14px;
+      background-color: #005bea; color: #fff;
+      border: none; border-radius: 4px; cursor: pointer;
+    }
+    .send-code-btn:hover { background-color: #004bb5; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo-container"><div class="logo-text">GEREE</div></div>
+    <div class="switch-btns">
+      <button id="login-btn" class="active">Login</button>
+      <button id="register-btn">Register</button>
+    </div>
+
+    <!-- Login Form -->
+    <div id="login-form">
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="login-username">Username / Email / Phone</label>
+          <input type="text" id="login-username" placeholder="Enter username, email, or phone" required />
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="Enter password" required />
+        </div>
+        <div class="form-group">
+          <label for="login-otp">OTP Code (6 digits, valid 60s)</label>
+          <div class="otp-container">
+            <input type="text" id="login-otp" placeholder="Enter OTP code" required />
+            <button type="button" id="send-code-btn" class="send-code-btn">Send Code</button>
+          </div>
+        </div>
+        <button type="submit" class="submit-btn">Login</button>
+      </form>
+    </div>
+
+    <!-- Register Form -->
+    <div id="register-form" class="hidden">
+      <h2 class="form-title">Register GEREE Account</h2>
+      <form id="registerForm">
+        <div class="form-group">
+          <label for="register-username">Username</label>
+          <input type="text" id="register-username" placeholder="Enter username" required />
+        </div>
+        <div class="form-group">
+          <label for="register-email">Email</label>
+          <input type="email" id="register-email" placeholder="Enter email" required />
+        </div>
+        <div class="form-group">
+          <label for="register-phone">Phone</label>
+          <input type="tel" id="register-phone" placeholder="Enter phone" />
+        </div>
+        <div class="form-group">
+          <label for="register-password">Password</label>
+          <input type="password" id="register-password" placeholder="Enter password" required />
+        </div>
+        <div class="form-group">
+          <label for="confirm-password">Confirm Password</label>
+          <input type="password" id="confirm-password" placeholder="Confirm password" required />
+        </div>
+        <button type="submit" class="submit-btn">Register</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Get server-rendered public key PEM
+    const publicKeyPem = `{{ public_key.replace("\n", "\\n") }}`;
+    const encryptor = new JSEncrypt();
+    encryptor.setPublicKey(publicKeyPem);
+
+    function encryptField(str) {
+      const enc = encryptor.encrypt(str);
+      if (!enc) throw new Error("RSA encryption failed");
+      return enc;
+    }
+
+    // Form switch
+    document.getElementById('login-btn').onclick = () => {
+      document.getElementById('login-btn').classList.add('active');
+      document.getElementById('register-btn').classList.remove('active');
+      document.getElementById('login-form').classList.remove('hidden');
+      document.getElementById('register-form').classList.add('hidden');
+    };
+    document.getElementById('register-btn').onclick = () => {
+      document.getElementById('register-btn').classList.add('active');
+      document.getElementById('login-btn').classList.remove('active');
+      document.getElementById('register-form').classList.remove('hidden');
+      document.getElementById('login-form').classList.add('hidden');
+    };
+
+    // Register submit
+    document.getElementById('registerForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const raw = {
+        username: document.getElementById('register-username').value,
+        email:    document.getElementById('register-email').value,
+        phone:    document.getElementById('register-phone').value || '',
+        password: document.getElementById('register-password').value
+      };
+      const data = {
+        username: encryptField(raw.username),
+        email:    encryptField(raw.email),
+        phone:    encryptField(raw.phone),
+        password: encryptField(raw.password)
+      };
+      try {
+        const res = await fetch('/register', {
+          method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data)
+        });
+        const r = await res.json(); alert(r.message);
+      } catch(err) { console.error(err); alert('Register request error: '+err); }
+    });
+
+    // Send OTP code
+    document.getElementById('send-code-btn').addEventListener('click', async () => {
+      const idf = document.getElementById('login-username').value.trim();
+      const pwd = document.getElementById('login-password').value;
+      if (!idf || !pwd) return alert('Please enter username and password first');
+      const data = { email: encryptField(idf), password: encryptField(pwd) };
+      try {
+        const res = await fetch('/sendcode', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) });
+        const r = await res.json(); alert(r.message);
+      } catch(err) { console.error(err); alert('Send code error: '+err); }
+    });
+
+    // Login submit
+    document.getElementById('loginForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const data = {
+        email:    encryptField(document.getElementById('login-username').value.trim()),
+        password: encryptField(document.getElementById('login-password').value),
+        otp:      document.getElementById('login-otp').value
+      };
+      try {
+        const res = await fetch('/login', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) });
+        const r = await res.json(); alert(res.ok ? 'Login successful' : 'Login failed: '+r.message);
+      } catch(err) { console.error(err); alert('Login request error: '+err); }
+    });
+  </script>
+</body>
+</html>

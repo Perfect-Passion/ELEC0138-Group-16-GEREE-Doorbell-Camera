@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8' />
+  <title>GEREE Doorbell Camera - Login/Register</title>
+  <link rel='preconnect' href='https://fonts.gstatic.com' />
+  <link href='https://fonts.googleapis.com/css2?family=Anton&family=Lato:wght@300;400;700&display=swap' rel='stylesheet' />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Lato', sans-serif;
+      background: url('Background.png') no-repeat center center fixed;
+      background-size: 100% 100%;
+    }
+    .container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 420px;
+      min-height: 520px;
+      background-color: rgba(255, 255, 255, 0.90);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      padding: 40px 30px;
+    }
+    .logo-container {
+      text-align: center;
+      margin-bottom: 5px;
+    }
+    .logo-container .logo-text {
+      font-family: 'Anton', sans-serif;
+      font-size: 72px;
+      letter-spacing: 3px;
+      color: #005bea;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    .switch-btns {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .switch-btns button {
+      background: transparent;
+      border: none;
+      font-size: 16px;
+      margin: 0 20px;
+      padding: 10px 0;
+      cursor: pointer;
+      transition: color 0.3s ease, border-bottom 0.3s ease;
+      color: #666;
+    }
+    .switch-btns button.active {
+      color: #005bea;
+      border-bottom: 2px solid #005bea;
+    }
+    .form-title {
+      text-align: center;
+      font-size: 26px;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 25px;
+      margin-top: -10px;
+      letter-spacing: 1px;
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: #555;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 12px 10px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .form-group input:focus {
+      border-color: #005bea;
+      box-shadow: 0 0 8px rgba(0, 91, 234, 0.2);
+      outline: none;
+    }
+    .submit-btn {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      background-color: #005bea;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .submit-btn:hover {
+      background-color: #004bb5;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js'></script>
+</head>
+<body>
+  <div class='container'>
+    <div class='logo-container'>
+      <div class='logo-text'>GEREE</div>
+    </div>
+    <div class='switch-btns'>
+      <button id='login-btn' class='active'>Login</button>
+      <button id='register-btn'>Register</button>
+    </div>
+
+    <div id='login-form'>
+      <form id='loginForm'>
+        <div class='form-group'>
+          <label for='login-username'>Username / Email / Phone</label>
+          <input type='text' id='login-username' name='login-username' placeholder='Enter username' required />
+        </div>
+        <div class='form-group'>
+          <label for='login-password'>Password</label>
+          <input type='password' id='login-password' name='login-password' placeholder='Enter password' required />
+        </div>
+        <button type='submit' class='submit-btn'>Login</button>
+      </form>
+    </div>
+
+    <div id='register-form' class='hidden'>
+      <h2 class='form-title'>Register GEREE Account</h2>
+      <form id='registerForm'>
+        <div class='form-group'>
+          <label for='register-username'>Username</label>
+          <input type='text' id='register-username' name='register-username' placeholder='Enter username' required />
+        </div>
+        <div class='form-group'>
+          <label for='register-email'>Email</label>
+          <input type='email' id='register-email' name='register-email' placeholder='Enter email' required />
+        </div>
+        <div class='form-group'>
+          <label for='register-phone'>Phone</label>
+          <input type='tel' id='register-phone' name='register-phone' placeholder='Enter phone' />
+        </div>
+        <div class='form-group'>
+          <label for='register-password'>Password</label>
+          <input type='password' id='register-password' name='register-password' placeholder='Enter password' required />
+        </div>
+        <div class='form-group'>
+          <label for='confirm-password'>Confirm Password</label>
+          <input type='password' id='confirm-password' name='confirm-password' placeholder='Confirm password' required />
+        </div>
+        <button type='submit' class='submit-btn'>Register</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    (async function() {
+      const realBase = 'http://127.0.0.1:5000';
+      const mitmBase = 'http://127.0.0.1:8081';
+      let baseURL = realBase;
+      try {
+        await fetch(mitmBase + '/', { method: 'HEAD', mode: 'no-cors' });
+        baseURL = mitmBase;
+        console.log('MITM proxy detected, API requests will be forwarded through port 8081.');
+      } catch (error) {
+        baseURL = realBase;
+        console.log('No MITM proxy detected, API requests will be sent directly to port 5000.');
+      }
+
+      const aesKey = CryptoJS.enc.Utf8.parse('1234567890123456');
+      const aesIv  = CryptoJS.enc.Utf8.parse('6543210987654321');
+
+      function encrypt(str) {
+        return CryptoJS.AES.encrypt(str, aesKey, { iv: aesIv, padding: CryptoJS.pad.Pkcs7, mode: CryptoJS.mode.CBC }).toString();
+      }
+
+      const loginBtn = document.getElementById('login-btn');
+      const registerBtn = document.getElementById('register-btn');
+      const loginFormDiv = document.getElementById('login-form');
+      const registerFormDiv = document.getElementById('register-form');
+
+      loginBtn.addEventListener('click', () => {
+        loginBtn.classList.add('active');
+        registerBtn.classList.remove('active');
+        loginFormDiv.classList.remove('hidden');
+        registerFormDiv.classList.add('hidden');
+      });
+
+      registerBtn.addEventListener('click', () => {
+        registerBtn.classList.add('active');
+        loginBtn.classList.remove('active');
+        registerFormDiv.classList.remove('hidden');
+        loginFormDiv.classList.add('hidden');
+      });
+
+      document.getElementById('registerForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const raw = {
+          username: document.getElementById('register-username').value,
+          email:    document.getElementById('register-email').value,
+          phone:    document.getElementById('register-phone').value || '',
+          password: document.getElementById('register-password').value
+        };
+        const data = {
+          username: encrypt(raw.username),
+          email:    encrypt(raw.email),
+          phone:    encrypt(raw.phone),
+          password: encrypt(raw.password)
+        };
+        try {
+          const response = await fetch(baseURL + '/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+          if (!response.ok) throw new Error('Network response was not ok');
+          const result = await response.json();
+          alert('Register result: ' + result.message);
+        } catch (error) {
+          console.error('Register request error:', error);
+          alert('Register request error: ' + error);
+        }
+      });
+
+      document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const raw = {
+          login:    document.getElementById('login-username').value,
+          password: document.getElementById('login-password').value
+        };
+        const data = {
+          email:    encrypt(raw.login),
+          password: encrypt(raw.password)
+        };
+        try {
+          const response = await fetch(baseURL + '/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+          if (!response.ok) throw new Error('Network response was not ok');
+          const result = await response.json();
+          alert('Login result: ' + result.message);
+        } catch (error) {
+          console.error('Login request error:', error);
+          alert('Login request error: ' + error);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
