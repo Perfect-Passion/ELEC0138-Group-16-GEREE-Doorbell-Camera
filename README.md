@@ -19,7 +19,7 @@ Forwards the original encrypted data to the real backend
 How to run? Start the backend server Start the backend server and then Start the MITM proxy Proxy listening at: http://127.0.0.1:8081.
 Finally check the MITM log. can find the user register information 
 For threat 3 defense,
-Feature:
+Feature:/n.
 RSA Encryption: All credentials are encrypted on the client side using RSA (2048-bit) before being sent to the server.
 Email-Based OTP Verification: A 6-digit verification code is sent to the user's email to complete login.
 Password Hashing: Passwords are securely stored with bcrypt hashing.
